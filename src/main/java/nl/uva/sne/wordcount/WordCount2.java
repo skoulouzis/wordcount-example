@@ -63,14 +63,13 @@ public class WordCount2 {
 
     Configuration conf = new Configuration();
 
-    conf.set("yarn.resourcemanager.address", "hadoop-master:8032");
-    //mapred-site.xm
-    conf.set("mapreduce.framework.name", "yarn");
-    //dfs-site.xml
-    conf.set("fs.default.name", "hdfs://hadoop-master:9000/");
-    conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-    conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
-
+//    conf.set("yarn.resourcemanager.address", "hadoop-master:8032");
+//    //mapred-site.xm
+//    conf.set("mapreduce.framework.name", "yarn");
+//    //dfs-site.xml
+//    conf.set("fs.default.name", "hdfs://hadoop-master:9000/");
+//    conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+//    conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
     Job job = Job.getInstance(conf, "word count");
     job.setJarByClass(WordCount2.class);
     job.setMapperClass(TokenizerMapper.class);
