@@ -57,9 +57,9 @@ public class WordCount2 {
   }
 
   public static void main(String[] args) throws Exception {
-    args = new String[2];
-    args[0] = System.getProperty("user.home") + "/Downloads/trainData";
-    args[1] = System.getProperty("user.home") + "/Downloads/out";
+//    args = new String[2];
+//    args[0] = System.getProperty("user.home") + "/Downloads/trainData";
+//    args[1] = System.getProperty("user.home") + "/Downloads/out";
 
     Configuration conf = new Configuration();
 
