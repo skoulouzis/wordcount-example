@@ -7,6 +7,9 @@
 package nl.uva.cpp;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import org.apache.hadoop.conf.Configuration;
@@ -32,6 +35,16 @@ public class WordCountTool extends Configured implements Tool {
     for (Object key : keys) {
       String val = prop.getProperty((String) key);
       conf.set((String) key, val);
+    }
+
+    String confprop = "";
+    for (Map.Entry<String, String> entry : conf) {
+      confprop += entry.getKey() + " : " + entry.getValue() + "\n";
+    }
+    System.err.println("STDERR: " + confprop);
+
+    try (PrintWriter out = new PrintWriter(System.getProperty("user.home") + "/" + this.getClass().getName() + ".log")) {
+      out.write(confprop);
     }
 
     Job job = Job.getInstance(conf);
