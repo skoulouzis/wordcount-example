@@ -52,7 +52,7 @@ public class WordCount {
   }
 
   public static void main(String[] args) throws Exception {
-    args = new String[]{System.getProperty("user.home") + "/Downloads/trainData", System.getProperty("user.home") + "/Downloads/out"};
+//    args = new String[]{System.getProperty("user.home") + "/Downloads/trainData", System.getProperty("user.home") + "/Downloads/out"};
 
     Configuration conf = new Configuration();
     Job job = Job.getInstance(conf, "word count");
