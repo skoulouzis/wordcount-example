@@ -37,11 +37,7 @@
                     </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-        
-                    <excludeGroupIds>com.google</excludeGroupIds>
-                    <excludeTransitive>true</excludeTransitive>
-        
+                    </descriptorRefs>        
                 </configuration>
                 <executions>
                     <execution>

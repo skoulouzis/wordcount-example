@@ -6,6 +6,9 @@
 
 package nl.uva.cpp;
 
+import java.io.FileInputStream;
+import java.util.Properties;
+import java.util.Set;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -22,6 +25,15 @@ public class WordCountTool extends Configured implements Tool {
   @Override
   public int run(String[] args) throws Exception {
     Configuration conf = this.getConf();
+    FileInputStream input = new FileInputStream(args[args.length - 1]);
+    Properties prop = new Properties();
+    prop.load(input);
+    Set<Object> keys = prop.keySet();
+    for (Object key : keys) {
+      String val = prop.getProperty((String) key);
+      conf.set((String) key, val);
+    }
+
     Job job = Job.getInstance(conf);
     job.setJarByClass(this.getClass());
 
