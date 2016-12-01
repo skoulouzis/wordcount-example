@@ -6,8 +6,12 @@
 
 package nl.uva.cpp;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Properties;
@@ -25,27 +29,17 @@ import org.apache.hadoop.util.Tool;
 
 public class WordCountTool extends Configured implements Tool {
 
+  private String HADOOP_CONF_BASE_DIR = "/cm/shared/package/hadoop/hadoop-2.5.0/etc/hadoop";
+
   @Override
   public int run(String[] args) throws Exception {
     Configuration conf = this.getConf();
-    FileInputStream input = new FileInputStream(args[args.length - 1]);
-    Properties prop = new Properties();
-    prop.load(input);
-    Set<Object> keys = prop.keySet();
-    for (Object key : keys) {
-      String val = prop.getProperty((String) key);
-      conf.set((String) key, val);
-    }
 
-    String confprop = "";
-    for (Map.Entry<String, String> entry : conf) {
-      confprop += entry.getKey() + " : " + entry.getValue() + "\n";
-    }
-    System.err.println("STDERR: " + confprop);
+    conf = addPropertiesToConf(conf, args[args.length - 1]);
 
-    try (PrintWriter out = new PrintWriter(System.getProperty("user.home") + "/" + this.getClass().getName() + ".log")) {
-      out.write(confprop);
-    }
+    conf = addConfFiles(conf, args[args.length - 2]);
+
+    printProps(conf);
 
     Job job = Job.getInstance(conf);
     job.setJarByClass(this.getClass());
@@ -68,5 +62,47 @@ public class WordCountTool extends Configured implements Tool {
     job.setOutputValueClass(IntWritable.class);
 
     return job.waitForCompletion(true) ? 0 : 1;
+  }
+
+  private Configuration addPropertiesToConf(Configuration conf, String arg) throws FileNotFoundException, IOException {
+    try (FileInputStream input = new FileInputStream(arg)) {
+      Properties prop = new Properties();
+      prop.load(input);
+      Set<Object> keys = prop.keySet();
+      for (Object key : keys) {
+        String val = prop.getProperty((String) key);
+        conf.set((String) key, val);
+      }
+    }
+    return conf;
+  }
+
+  private Configuration addConfFiles(Configuration conf, String arg) {
+    HADOOP_CONF_BASE_DIR = arg;
+    File etc = new File(HADOOP_CONF_BASE_DIR);
+    File[] files = etc.listFiles(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.toLowerCase().endsWith(".xml");
+      }
+    });
+    if (files != null) {
+      for (File f : files) {
+        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
+      }
+    }
+    return conf;
+  }
+
+  private void printProps(Configuration conf) throws FileNotFoundException {
+    String confprop = "";
+    for (Map.Entry<String, String> entry : conf) {
+      confprop += entry.getKey() + " : " + entry.getValue() + "\n";
+    }
+    System.err.println("STDERR: " + confprop);
+
+    try (PrintWriter out = new PrintWriter(System.getProperty("user.home") + "/" + this.getClass().getName() + ".log")) {
+      out.write(confprop);
+    }
   }
 }
