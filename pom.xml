@@ -15,22 +15,16 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-hdfs</artifactId>
-            <version>2.7.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-mapreduce-client-core</artifactId>
-            <version>2.7.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-common</artifactId>
             <version>2.7.2</version>
+            <type>jar</type>
         </dependency>
-
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-app</artifactId>
+            <version>2.7.2</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     
     <build>
@@ -41,7 +35,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>nl.uva.sne.wordcount.WordCount2</mainClass>
+                            <mainClass>nl.uva.sne.wordcount.WordCount</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
