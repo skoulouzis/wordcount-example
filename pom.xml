@@ -38,6 +38,10 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+        
+                    <excludeGroupIds>com.google</excludeGroupIds>
+                    <excludeTransitive>true</excludeTransitive>
+        
                 </configuration>
                 <executions>
                     <execution>
