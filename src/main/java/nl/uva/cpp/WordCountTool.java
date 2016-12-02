@@ -9,7 +9,6 @@ package nl.uva.cpp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -25,16 +24,47 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.util.RunJar;
 import org.apache.hadoop.util.Tool;
 
 public class WordCountTool extends Configured implements Tool {
 
   private String HADOOP_CONF_BASE_DIR = "/cm/shared/package/hadoop/hadoop-2.5.0/etc/hadoop";
 
+  public Job getJob(String[] args) throws IOException {
+    Configuration conf = this.getConf();
+
+    conf = addPropertiesToConf(conf, args[args.length - 1]);
+
+    conf = addConfFiles(conf, args[args.length - 2]);
+
+    printProps(conf);
+
+    Job job = Job.getInstance(conf);
+    job.setJarByClass(this.getClass());
+
+    // Set the input and output paths for the job, to the paths given
+    // on the command line.
+    FileInputFormat.addInputPath(job, new Path(args[0]));
+    FileOutputFormat.setOutputPath(job, new Path(args[1]));
+
+    // Use our mapper and reducer classes.
+    job.setMapperClass(WordCountMapper.class);
+    job.setReducerClass(WordCountReducer.class);
+
+    // Our input file is a text file.
+    job.setInputFormatClass(TextInputFormat.class);
+
+    // Our output is a mapping of text to integers. (See the tutorial for
+    // some notes about how you could map from text to text instead.)
+    job.setOutputKeyClass(Text.class);
+    job.setOutputValueClass(IntWritable.class);
+    
+    return job;
+  }
+
   @Override
   public int run(String[] args) throws Exception {
-    
+
     Configuration conf = this.getConf();
 
     conf = addPropertiesToConf(conf, args[args.length - 1]);

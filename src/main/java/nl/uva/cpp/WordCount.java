@@ -1,7 +1,6 @@
 
 package nl.uva.cpp;
 
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.hadoop.conf.Configuration;
@@ -14,9 +13,10 @@ public class WordCount {
     try {
 
 //      example1(args);
-      example2(args);
+//      runJar(args);
+      runJob(args);
 
-    } catch (Exception ex) {
+    } catch (Throwable ex) {
       Logger.getLogger(WordCount.class.getName()).log(Level.SEVERE, null, ex);
     }
 
@@ -31,8 +31,12 @@ public class WordCount {
 
   }
 
-  private static void example2(String[] args) throws Throwable {
+  private static void runJar(String[] args) throws Throwable {
     RunJar.main(args);
+  }
 
+  private static void runJob(String[] args) throws Exception {
+    WordCountTool wc = new WordCountTool();
+    wc.run(args);
   }
 }
