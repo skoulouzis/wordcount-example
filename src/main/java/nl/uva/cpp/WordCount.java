@@ -32,7 +32,7 @@ public class WordCount {
 
   private static void runJobWithToolRunner(String[] args) throws Exception {
 
-    args = new String[]{System.getProperty("user.home") + "/Downloads/trainData", System.getProperty("user.home") + "/Downloads/out"};
+//    args = new String[]{System.getProperty("user.home") + "/Downloads/trainData", System.getProperty("user.home") + "/Downloads/out"};
     int retval = 0;
 
     retval = ToolRunner.run(new Configuration(), new WordCountTool(), args);
