@@ -17,14 +17,13 @@
 
     <dependencies>
 
-        
+        <!--  ###############Hadoop dependencies ###############-->
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-mapreduce-client-jobclient</artifactId>
             <version>${hadoop.version}</version>
             <optional>true</optional>
         </dependency>
-        
                 
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -32,7 +31,6 @@
             <version>${hadoop.version}</version>
             <optional>true</optional>
         </dependency>
-        
         
         <dependency>
             <groupId>org.apache.hadoop</groupId>
@@ -60,6 +58,7 @@
             <version>${lzo-hadoop.version}</version>
             <optional>true</optional>
         </dependency>
+        <!--  #############################-->
     </dependencies>
     
     

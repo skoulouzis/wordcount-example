@@ -31,7 +31,6 @@ public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritabl
       String token = itr.nextToken();
       word.set(token);
       context.write(word, one);
-      
       context.getCounter(Counters.INPUT_WORDS).increment(1);
     }
   }

@@ -67,6 +67,8 @@ public class WordCountTool extends Configured implements Tool {
 
     Job job = getJob(args);
 
+    System.err.println("JobID: " + job.getJobID());
+
     return job.waitForCompletion(true) ? 0 : 1;
   }
 

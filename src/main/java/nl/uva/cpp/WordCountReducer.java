@@ -24,6 +24,7 @@ public class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritab
     }
     /*String value = String.valueOf(count) + "\t" + String.valueOf(sum);
 		context.write(key, new Text(value));*/
+    System.err.println("Out: " + key + "," + sum);
     context.write(key, new IntWritable(sum));
   }
 }
