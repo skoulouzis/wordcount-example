@@ -31,7 +31,7 @@ public class WordCountTool extends Configured implements Tool {
   private String HADOOP_CONF_BASE_DIR = "/cm/shared/package/hadoop/hadoop-2.5.0/etc/hadoop";
 
   public Job getJob(String[] args) throws IOException {
-    Configuration conf = this.getConf();
+    Configuration conf = getConf();
 
     conf = addPropertiesToConf(conf, args[args.length - 1]);
 
@@ -65,14 +65,7 @@ public class WordCountTool extends Configured implements Tool {
   @Override
   public int run(String[] args) throws Exception {
 
-    Configuration conf = this.getConf();
-    if (conf == null) {
-      conf = new Configuration();
-    }
-
-    conf = addPropertiesToConf(conf, args[args.length - 1]);
-    conf = addConfFiles(conf, args[args.length - 2]);
-    printProps(conf);
+    Configuration conf = getConf();
 
     Job job = getJob(args);
 
@@ -122,5 +115,14 @@ public class WordCountTool extends Configured implements Tool {
     try (PrintWriter out = new PrintWriter(System.getProperty("user.home") + "/" + this.getClass().getName() + ".log")) {
       out.write(confprop);
     }
+  }
+
+  @Override
+  public Configuration getConf() {
+    Configuration conf = super.getConf();
+    if (conf == null) {
+      conf = new Configuration();
+    }
+    return conf;
   }
 }
