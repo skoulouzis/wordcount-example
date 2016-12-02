@@ -65,8 +65,6 @@ public class WordCountTool extends Configured implements Tool {
   @Override
   public int run(String[] args) throws Exception {
 
-    Configuration conf = getConf();
-
     Job job = getJob(args);
 
     return job.waitForCompletion(true) ? 0 : 1;

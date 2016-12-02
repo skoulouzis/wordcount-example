@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <version>0.1-SNAPSHOT</version>
     <properties>
-        <hadoop.version>2.7.2</hadoop.version>
+        <hadoop.version>2.5.2</hadoop.version>
         <exec.mainClass>nl.uva.cpp.WordCount</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
@@ -15,9 +15,33 @@
 
 
     <dependencies>
+
+        
         <dependency>
             <groupId>org.apache.hadoop</groupId>
-            <artifactId>hadoop-client</artifactId>
+            <artifactId>hadoop-mapreduce-client-jobclien</artifactId>
+            <version>${hadoop.version}</version>
+            <optional>true</optional>
+        </dependency>
+        
+                
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-common</artifactId>
+            <version>${hadoop.version}</version>
+            <optional>true</optional>
+        </dependency>
+        
+        
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-mapreduce-client-shuffle</artifactId>
+            <version>${hadoop.version}</version>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-common</artifactId>
             <version>${hadoop.version}</version>
             <optional>true</optional>
         </dependency>
