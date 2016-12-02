@@ -37,7 +37,7 @@ public class WordCountTool extends Configured implements Tool {
 
     conf = addConfFiles(conf, args[args.length - 2]);
 
-    printProps(conf);
+//    printProps(conf);
 
     Job job = Job.getInstance(conf);
     job.setJarByClass(this.getClass());
@@ -64,11 +64,8 @@ public class WordCountTool extends Configured implements Tool {
 
   @Override
   public int run(String[] args) throws Exception {
-
     Job job = getJob(args);
-
     System.err.println("JobID: " + job.getJobID());
-
     return job.waitForCompletion(true) ? 0 : 1;
   }
 
