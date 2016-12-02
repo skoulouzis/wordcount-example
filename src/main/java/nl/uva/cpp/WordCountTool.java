@@ -58,7 +58,7 @@ public class WordCountTool extends Configured implements Tool {
     // some notes about how you could map from text to text instead.)
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(IntWritable.class);
-    
+
     return job;
   }
 
@@ -66,6 +66,9 @@ public class WordCountTool extends Configured implements Tool {
   public int run(String[] args) throws Exception {
 
     Configuration conf = this.getConf();
+    if (conf == null) {
+      conf = new Configuration();
+    }
 
     conf = addPropertiesToConf(conf, args[args.length - 1]);
 
