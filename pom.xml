@@ -45,6 +45,14 @@
             <version>${hadoop.version}</version>
             <optional>true</optional>
         </dependency>
+        
+        <dependency>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-hdfs</artifactId>
+            <version>${hadoop.version}</version>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
     
     
