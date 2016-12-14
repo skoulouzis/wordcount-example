@@ -17,38 +17,32 @@ public class WordCount {
   public static void main(String[] args) {
 
     try {
-      
+
 //      example1(args);
 //      runJar(args);
-Properties prop = new Properties();
-try (FileInputStream input = new FileInputStream(args[3])) {
-  prop.load(input);
-} catch (FileNotFoundException ex) {
-  Logger.getLogger(WordCount.class.getName()).log(Level.SEVERE, null, ex);
-} catch (IOException ex) {
-  Logger.getLogger(WordCount.class.getName()).log(Level.SEVERE, null, ex);
-}
-String defaultFS = prop.getProperty(FileSystem.FS_DEFAULT_NAME_KEY, "NULL");
-String mapreduceFramework = prop.getProperty("mapreduce.framework.name", "NULL");
-String yarnResourcemanage = prop.getProperty("yarn.resourcemanager.address", "NULL");
+      Properties prop = new Properties();
+      try (FileInputStream input = new FileInputStream(args[2])) {
+        prop.load(input);
+      } catch (FileNotFoundException ex) {
+        Logger.getLogger(WordCount.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (IOException ex) {
+        Logger.getLogger(WordCount.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      String hadoopConfBaseDir = prop.getProperty("hadoop.conf.base.dir", "/usr/local/hadoop/etc/hadoop/");
+      String[] mrArgs = new String[]{args[0], args[1], hadoopConfBaseDir};
+      long startRun1 = System.currentTimeMillis();
 
-String[] mrArgs = new String[]{args[0], args[1], args[2], defaultFS, mapreduceFramework, yarnResourcemanage};
-long startRun1 = System.currentTimeMillis();
+      runJob(mrArgs);
+      long elapsedRun1 = System.currentTimeMillis() - startRun1;
 
-runJob(mrArgs);
-long elapsedRun1 = System.currentTimeMillis() - startRun1;
+      long startRun2 = System.currentTimeMillis();
+      args[1] = "output_WithToolRunner";
+      mrArgs = new String[]{args[0], args[1], hadoopConfBaseDir};
+      runJobWithToolRunner(mrArgs);
+      long elapsedRun2 = System.currentTimeMillis() - startRun2;
 
-long startRun2 = System.currentTimeMillis();
-args[1] = "output_WithToolRunner";
-defaultFS = "NULL";// prop.getProperty(FileSystem.FS_DEFAULT_NAME_KEY);
-mapreduceFramework = "NULL";//prop.getProperty("mapreduce.framework.name");
-yarnResourcemanage = "NULL";//prop.getProperty("yarn.resourcemanager.address");
-mrArgs = new String[]{args[0], args[1], args[2], defaultFS, mapreduceFramework, yarnResourcemanage};
-runJobWithToolRunner(mrArgs);
-long elapsedRun2 = System.currentTimeMillis() - startRun2;
-
-System.err.println("runJob elapsed: " + elapsedRun1 + "ms");
-System.err.println("runJobWithToolRunner elapsed: " + elapsedRun2 + "ms");
+      System.err.println("runJob elapsed: " + elapsedRun1 + "ms");
+      System.err.println("runJobWithToolRunner elapsed: " + elapsedRun2 + "ms");
 
     } catch (Exception ex) {
       Logger.getLogger(WordCount.class.getName()).log(Level.SEVERE, null, ex);
