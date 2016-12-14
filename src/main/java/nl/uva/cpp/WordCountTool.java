@@ -62,17 +62,16 @@ public class WordCountTool extends Configured implements Tool {
     return job.waitForCompletion(true) ? 0 : 1;
   }
 
-  private Configuration addPropertiesToConf(Configuration conf, String[] args) throws FileNotFoundException, IOException {
-    if (args != null) {
-      if (args[0] != null || !args[0].equals("NULL")) {
-        conf.set(FileSystem.FS_DEFAULT_NAME_KEY, args[0]);
-      }
-      if (args[1] != null || !args[1].equals("NULL")) {
-        conf.set("mapreduce.framework.name", args[1]);
-      }
-      if (args[2] != null || !args[2].equals("NULL")) {
-        conf.set("yarn.resourcemanager.address", args[2]);
-      }
+  private Configuration addPropertiesToConf(Configuration conf, String[] args) {
+
+    if (!args[0].equals("NULL")) {
+      conf.set(FileSystem.FS_DEFAULT_NAME_KEY, args[0]);
+    }
+    if (!args[1].equals("NULL")) {
+      conf.set("mapreduce.framework.name", args[1]);
+    }
+    if (!args[2].equals("NULL")) {
+      conf.set("yarn.resourcemanager.address", args[2]);
     }
 
 //    try (FileInputStream input = new FileInputStream(arg)) {
