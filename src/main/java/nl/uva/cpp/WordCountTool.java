@@ -88,8 +88,8 @@ public class WordCountTool extends Configured implements Tool {
 //        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
 //      }
 //    }
-    conf.addResource(new org.apache.hadoop.fs.Path(etc.getAbsolutePath() + "/core-site.xml"));
-    conf.addResource(new org.apache.hadoop.fs.Path(etc.getAbsolutePath() + "/hdfs-site.xml"));
+//    conf.addResource(new org.apache.hadoop.fs.Path(etc.getAbsolutePath() + "/core-site.xml"));
+//    conf.addResource(new org.apache.hadoop.fs.Path(etc.getAbsolutePath() + "/hdfs-site.xml"));
 
     conf.set("mapreduce.map.class", WordCountMapper.class.getName());
     conf.set("mapreduce.reduce.class", WordCountReducer.class.getName());
