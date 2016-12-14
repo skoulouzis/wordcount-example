@@ -6,11 +6,15 @@
 
 package nl.uva.cpp;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -28,7 +32,7 @@ public class WordCountTool extends Configured implements Tool {
 //  private String HADOOP_CONF_BASE_DIR = "/cm/shared/package/hadoop/hadoop-2.5.0/etc/hadoop";
   public Job getJob(String[] args) throws IOException {
     Configuration conf = getConf();
-    String[] subset = Arrays.copyOfRange(args, 3, args.length);
+    String[] subset = Arrays.copyOfRange(args, 2, args.length);
     conf = addPropertiesToConf(conf, subset);
 
 //    printProps(conf);
@@ -62,7 +66,7 @@ public class WordCountTool extends Configured implements Tool {
     return job.waitForCompletion(true) ? 0 : 1;
   }
 
-  private Configuration addPropertiesToConf(Configuration conf, String[] args) {
+  private Configuration addPropertiesToConf(Configuration conf, String[] args) throws IOException {
 
     if (!args[0].equals("NULL")) {
       conf.set(FileSystem.FS_DEFAULT_NAME_KEY, args[0]);
@@ -74,27 +78,19 @@ public class WordCountTool extends Configured implements Tool {
       conf.set("yarn.resourcemanager.address", args[2]);
     }
 
-//    try (FileInputStream input = new FileInputStream(arg)) {
-//      Properties prop = new Properties();
-//      prop.load(input);
-//      Set<Object> keys = prop.keySet();
-//      for (Object key : keys) {
-//        String val = prop.getProperty((String) key);
-//        conf.set((String) key, val);
-//      }
-//      File etc = new File(prop.getProperty("hadoop.conf.base.dir"));
-//      File[] files = etc.listFiles(new FilenameFilter() {
-//        @Override
-//        public boolean accept(File dir, String name) {
-//          return name.toLowerCase().endsWith(".xml");
-//        }
-//      });
-//      if (files != null) {
-//        for (File f : files) {
-//          conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
-//        }
-//      }
-//    }
+    File etc = new File(args[3]);
+    File[] files = etc.listFiles(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.toLowerCase().endsWith(".xml");
+      }
+    });
+    if (files != null) {
+      for (File f : files) {
+        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
+      }
+    }
+
     conf.set("mapreduce.map.class", WordCountMapper.class.getName());
     conf.set("mapreduce.reduce.class", WordCountReducer.class.getName());
     conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
