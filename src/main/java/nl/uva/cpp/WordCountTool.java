@@ -7,14 +7,12 @@
 package nl.uva.cpp;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Properties;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -79,17 +77,19 @@ public class WordCountTool extends Configured implements Tool {
     }
 
     File etc = new File(args[3]);
-    File[] files = etc.listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.toLowerCase().endsWith(".xml");
-      }
-    });
-    if (files != null) {
-      for (File f : files) {
-        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
-      }
-    }
+//    File[] files = etc.listFiles(new FilenameFilter() {
+//      @Override
+//      public boolean accept(File dir, String name) {
+//        return name.toLowerCase().endsWith(".xml");
+//      }
+//    });
+//    if (files != null) {
+//      for (File f : files) {
+//        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
+//      }
+//    }
+    conf.addResource(new org.apache.hadoop.fs.Path(etc.getAbsolutePath() + "/core-site.xml"));
+    conf.addResource(new org.apache.hadoop.fs.Path(etc.getAbsolutePath() + "/hdfs-site.xml"));
 
     conf.set("mapreduce.map.class", WordCountMapper.class.getName());
     conf.set("mapreduce.reduce.class", WordCountReducer.class.getName());
