@@ -1,9 +1,12 @@
 
 package nl.uva.cpp;
 
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.util.RunJar;
 import org.apache.hadoop.util.ToolRunner;
 
@@ -14,12 +17,27 @@ public class WordCount {
 
 //      example1(args);
 //      runJar(args);
+      Properties prop = new Properties();
+      try (FileInputStream input = new FileInputStream(args[3])) {
+        prop.load(input);
+      }
+      String defaultFS = prop.getProperty(FileSystem.FS_DEFAULT_NAME_KEY);
+      String mapreduceFramework = prop.getProperty("mapreduce.framework.name");
+      String yarnResourcemanage = prop.getProperty("yarn.resourcemanager.address");
+
+      String[] mrArgs = new String[]{args[0], args[1], args[2], defaultFS, mapreduceFramework, yarnResourcemanage};
       long startRun1 = System.currentTimeMillis();
-      runJob(args);
+
+      runJob(mrArgs);
       long elapsedRun1 = System.currentTimeMillis() - startRun1;
 
       long startRun2 = System.currentTimeMillis();
-      runJobWithToolRunner(args);
+      args[1] = "output_WithToolRunner";
+      defaultFS = "file:///";// prop.getProperty(FileSystem.FS_DEFAULT_NAME_KEY);
+      mapreduceFramework = "NULL";//prop.getProperty("mapreduce.framework.name");
+      yarnResourcemanage = "NULL";//prop.getProperty("yarn.resourcemanager.address");
+      mrArgs = new String[]{args[0], args[1], args[2], defaultFS, mapreduceFramework, yarnResourcemanage};
+      runJobWithToolRunner(mrArgs);
       long elapsedRun2 = System.currentTimeMillis() - startRun2;
 
       System.err.println("runJob elapsed: " + elapsedRun1 + "ms");
