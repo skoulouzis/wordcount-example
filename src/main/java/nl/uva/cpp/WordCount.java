@@ -33,7 +33,7 @@ public class WordCount {
 
       long startRun2 = System.currentTimeMillis();
       args[1] = "output_WithToolRunner";
-      defaultFS = "file:///";// prop.getProperty(FileSystem.FS_DEFAULT_NAME_KEY);
+      defaultFS = "NULL";// prop.getProperty(FileSystem.FS_DEFAULT_NAME_KEY);
       mapreduceFramework = "NULL";//prop.getProperty("mapreduce.framework.name");
       yarnResourcemanage = "NULL";//prop.getProperty("yarn.resourcemanager.address");
       mrArgs = new String[]{args[0], args[1], args[2], defaultFS, mapreduceFramework, yarnResourcemanage};
