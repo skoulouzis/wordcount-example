@@ -88,7 +88,7 @@ public class WordCountTool extends Configured implements Tool {
 //    }
 //    conf.set("mapreduce.map.class", WordCountMapper.class.getName());
 //    conf.set("mapreduce.reduce.class", WordCountReducer.class.getName());
-//    conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+    conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 //    conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
 //    conf.set("mapred.jar", jar_Output_Folder+ java.io.File.separator + className+".jar");
     return conf;
