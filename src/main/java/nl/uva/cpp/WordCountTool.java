@@ -65,36 +65,31 @@ public class WordCountTool extends Configured implements Tool {
   }
 
   private Configuration addPropertiesToConf(Configuration conf, String[] args) throws IOException {
-
-    if (!args[0].equals("NULL")) {
-      conf.set(FileSystem.FS_DEFAULT_NAME_KEY, args[0]);
+    File etc = new File(args[0]);
+    File[] files = etc.listFiles(new FilenameFilter() {
+      @Override
+      public boolean accept(File dir, String name) {
+        return name.toLowerCase().endsWith(".xml");
+      }
+    });
+    if (files != null) {
+      for (File f : files) {
+        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
+      }
     }
-    if (!args[1].equals("NULL")) {
-      conf.set("mapreduce.framework.name", args[1]);
-    }
-    if (!args[2].equals("NULL")) {
-      conf.set("yarn.resourcemanager.address", args[2]);
-    }
-
-    File etc = new File(args[3]);
-//    File[] files = etc.listFiles(new FilenameFilter() {
-//      @Override
-//      public boolean accept(File dir, String name) {
-//        return name.toLowerCase().endsWith(".xml");
-//      }
-//    });
-//    if (files != null) {
-//      for (File f : files) {
-//        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
-//      }
+//    if (!args[0].equals("NULL")) {
+//      conf.set(FileSystem.FS_DEFAULT_NAME_KEY, args[1]);
 //    }
-//    conf.addResource(new org.apache.hadoop.fs.Path(etc.getAbsolutePath() + "/core-site.xml"));
-//    conf.addResource(new org.apache.hadoop.fs.Path(etc.getAbsolutePath() + "/hdfs-site.xml"));
-
-    conf.set("mapreduce.map.class", WordCountMapper.class.getName());
-    conf.set("mapreduce.reduce.class", WordCountReducer.class.getName());
-    conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-    conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
+//    if (!args[1].equals("NULL")) {
+//      conf.set("mapreduce.framework.name", args[2]);
+//    }
+//    if (!args[2].equals("NULL")) {
+//      conf.set("yarn.resourcemanager.address", args[3]);
+//    }
+//    conf.set("mapreduce.map.class", WordCountMapper.class.getName());
+//    conf.set("mapreduce.reduce.class", WordCountReducer.class.getName());
+//    conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+//    conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
 //    conf.set("mapred.jar", jar_Output_Folder+ java.io.File.separator + className+".jar");
     return conf;
   }
