@@ -28,18 +28,20 @@ public class WordCount {
       } catch (IOException ex) {
         Logger.getLogger(WordCount.class.getName()).log(Level.SEVERE, null, ex);
       }
+
       String hadoopConfBaseDir = prop.getProperty("hadoop.conf.base.dir", "/usr/local/hadoop/etc/hadoop/");
       String[] mrArgs = new String[]{args[0], args[1], hadoopConfBaseDir};
-      long startRun1 = System.currentTimeMillis();
-
-      runJob(mrArgs);
-      long elapsedRun1 = System.currentTimeMillis() - startRun1;
 
       long startRun2 = System.currentTimeMillis();
       args[1] = "output_WithToolRunner";
       mrArgs = new String[]{args[0], args[1], hadoopConfBaseDir};
       runJobWithToolRunner(mrArgs);
       long elapsedRun2 = System.currentTimeMillis() - startRun2;
+
+      long startRun1 = System.currentTimeMillis();
+      args[1] = "output";
+      runJob(mrArgs);
+      long elapsedRun1 = System.currentTimeMillis() - startRun1;
 
       System.err.println("runJob elapsed: " + elapsedRun1 + "ms");
       System.err.println("runJobWithToolRunner elapsed: " + elapsedRun2 + "ms");
