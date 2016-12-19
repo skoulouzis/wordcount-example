@@ -21,7 +21,8 @@ public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritabl
   static enum Counters {
     INPUT_WORDS
   }
-
+  
+  
   @Override
   public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
     String line = value.toString().toLowerCase();

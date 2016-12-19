@@ -6,7 +6,7 @@
     <packaging>jar</packaging>
     <version>0.1-SNAPSHOT</version>
     <properties>
-        <hadoop.version>2.5.2</hadoop.version>
+        <hadoop.version>2.7.2</hadoop.version>
         <lzo-hadoop.version>0.4.17</lzo-hadoop.version>
         <exec.mainClass>nl.uva.cpp.WordCount</exec.mainClass>
         <maven.compiler.source>1.7</maven.compiler.source>

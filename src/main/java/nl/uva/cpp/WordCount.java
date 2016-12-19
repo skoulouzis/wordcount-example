@@ -29,7 +29,7 @@ public class WordCount {
         Logger.getLogger(WordCount.class.getName()).log(Level.SEVERE, null, ex);
       }
 
-      String hadoopConfBaseDir = prop.getProperty("hadoop.conf.base.dir", "/usr/local/hadoop/etc/hadoop/");
+      String hadoopConfBaseDir = prop.getProperty("hadoop.conf.base.dir", "");
       String[] mrArgs = new String[]{args[0], args[1], hadoopConfBaseDir};
 
       long startRun2 = System.currentTimeMillis();
@@ -40,6 +40,7 @@ public class WordCount {
 
       long startRun1 = System.currentTimeMillis();
       args[1] = "output";
+      mrArgs = new String[]{args[0], args[1], hadoopConfBaseDir};
       runJob(mrArgs);
       long elapsedRun1 = System.currentTimeMillis() - startRun1;
 

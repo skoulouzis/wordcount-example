@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.Map;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -32,8 +31,7 @@ public class WordCountTool extends Configured implements Tool {
     Configuration conf = getConf();
     String[] subset = Arrays.copyOfRange(args, 2, args.length);
     conf = addPropertiesToConf(conf, subset);
-
-//    printProps(conf);
+    printProps(conf);
     Job job = Job.getInstance(conf);
     job.setJarByClass(this.getClass());
 
@@ -65,18 +63,19 @@ public class WordCountTool extends Configured implements Tool {
   }
 
   private Configuration addPropertiesToConf(Configuration conf, String[] args) throws IOException {
-    File etc = new File(args[0]);
-    File[] files = etc.listFiles(new FilenameFilter() {
-      @Override
-      public boolean accept(File dir, String name) {
-        return name.toLowerCase().endsWith(".xml");
-      }
-    });
-    if (files != null) {
-      for (File f : files) {
-        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
-      }
-    }
+//    File etc = new File(args[0]);
+//    File[] files = etc.listFiles(new FilenameFilter() {
+//      @Override
+//      public boolean accept(File dir, String name) {
+//        return name.toLowerCase().endsWith(".xml");
+//      }
+//    });
+//    if (files != null) {
+//      for (File f : files) {
+//        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
+//      }
+    //    conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+//    }
 //    if (!args[0].equals("NULL")) {
 //      conf.set(FileSystem.FS_DEFAULT_NAME_KEY, args[1]);
 //    }
@@ -88,9 +87,10 @@ public class WordCountTool extends Configured implements Tool {
 //    }
 //    conf.set("mapreduce.map.class", WordCountMapper.class.getName());
 //    conf.set("mapreduce.reduce.class", WordCountReducer.class.getName());
-    conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
 //    conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
 //    conf.set("mapred.jar", jar_Output_Folder+ java.io.File.separator + className+".jar");
+    conf.set("yarn.resourcemanager.address", "local");
+    conf.set("mapreduce.framework.name", "local");
     return conf;
   }
 
@@ -108,10 +108,10 @@ public class WordCountTool extends Configured implements Tool {
 
   @Override
   public Configuration getConf() {
-    Configuration conf = super.getConf();
-    if (conf == null) {
-      conf = new Configuration();
-    }
+    Configuration conf = null;//super.getConf();
+//    if (conf == null) {
+    conf = new Configuration();
+//    }
     return conf;
   }
 }
