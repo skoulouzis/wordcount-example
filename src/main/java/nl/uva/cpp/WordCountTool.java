@@ -1,37 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package nl.uva.cpp;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
-import java.util.Map;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.conf.*;
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapreduce.*;
+import org.apache.hadoop.mapreduce.lib.input.*;
+import org.apache.hadoop.mapreduce.lib.output.*;
+import org.apache.hadoop.util.*;
 
 public class WordCountTool extends Configured implements Tool {
 
-//  private String HADOOP_CONF_BASE_DIR = "/cm/shared/package/hadoop/hadoop-2.5.0/etc/hadoop";
-  public Job getJob(String[] args) throws IOException {
-    Configuration conf = getConf();
-    String[] subset = Arrays.copyOfRange(args, 2, args.length);
-    conf = addPropertiesToConf(conf, subset);
-    printProps(conf);
+  @Override
+  public int run(String[] args) throws Exception {
+    Configuration conf = this.getConf();
+    if (!args[2].equals("local")) {
+      conf.set(FileSystem.FS_DEFAULT_NAME_KEY, args[3]);
+      conf.set("mapreduce.framework.name", "yarn");
+      conf.set("yarn.resourcemanager.address", args[4]);
+      conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+    }
+
     Job job = Job.getInstance(conf);
     job.setJarByClass(this.getClass());
 
@@ -52,66 +41,14 @@ public class WordCountTool extends Configured implements Tool {
     job.setOutputKeyClass(Text.class);
     job.setOutputValueClass(IntWritable.class);
 
-    return job;
-  }
-
-  @Override
-  public int run(String[] args) throws Exception {
-    Job job = getJob(args);
-    System.err.println("JobID: " + job.getJobID());
+    // Limit the number of reduce/map classes to what was specified on
+    // the command line.
+//		int numTasks = Integer.valueOf(args[2]);
+//		job.setNumReduceTasks(numTasks);
+//		job.getConfiguration().setInt("mapred.max.split.size", 750000 / numTasks);
+    // This limits the number of running mappers, but not the total.
+    // job.getConfiguration().setInt("mapreduce.job.running.map.limit", numTasks);
+    // Run the job!
     return job.waitForCompletion(true) ? 0 : 1;
-  }
-
-  private Configuration addPropertiesToConf(Configuration conf, String[] args) throws IOException {
-//    File etc = new File(args[0]);
-//    File[] files = etc.listFiles(new FilenameFilter() {
-//      @Override
-//      public boolean accept(File dir, String name) {
-//        return name.toLowerCase().endsWith(".xml");
-//      }
-//    });
-//    if (files != null) {
-//      for (File f : files) {
-//        conf.addResource(new org.apache.hadoop.fs.Path(f.getAbsolutePath()));
-//      }
-    //    conf.set("fs.hdfs.impl", org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
-//    }
-//    if (!args[0].equals("NULL")) {
-//      conf.set(FileSystem.FS_DEFAULT_NAME_KEY, args[1]);
-//    }
-//    if (!args[1].equals("NULL")) {
-//      conf.set("mapreduce.framework.name", args[2]);
-//    }
-//    if (!args[2].equals("NULL")) {
-//      conf.set("yarn.resourcemanager.address", args[3]);
-//    }
-//    conf.set("mapreduce.map.class", WordCountMapper.class.getName());
-//    conf.set("mapreduce.reduce.class", WordCountReducer.class.getName());
-//    conf.set("fs.file.impl", org.apache.hadoop.fs.LocalFileSystem.class.getName());
-//    conf.set("mapred.jar", jar_Output_Folder+ java.io.File.separator + className+".jar");
-    conf.set("yarn.resourcemanager.address", "local");
-    conf.set("mapreduce.framework.name", "local");
-    return conf;
-  }
-
-  private void printProps(Configuration conf) throws FileNotFoundException {
-    String confprop = "";
-    for (Map.Entry<String, String> entry : conf) {
-      confprop += entry.getKey() + " : " + entry.getValue() + "\n";
-    }
-    System.err.println("STDERR: " + confprop);
-
-    try (PrintWriter out = new PrintWriter(System.getProperty("user.home") + "/" + this.getClass().getName() + ".log")) {
-      out.write(confprop);
-    }
-  }
-
-  @Override
-  public Configuration getConf() {
-    Configuration conf = null;//super.getConf();
-//    if (conf == null) {
-    conf = new Configuration();
-//    }
-    return conf;
   }
 }
