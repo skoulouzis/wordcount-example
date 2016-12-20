@@ -8,6 +8,5 @@ public class WordCount {
 
   public static void main(String[] args) throws Exception {
     int retval = ToolRunner.run(new Configuration(), new WordCountTool(), args);
-
   }
 }
